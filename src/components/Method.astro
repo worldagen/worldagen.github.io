@@ -1,0 +1,125 @@
+---
+// Method.astro — WorldAgen approach
+---
+<section id="method" class="content-section">
+  <div class="section-container">
+    <h2 class="section-title">Method</h2>
+    <p class="section-description">
+      WorldAgen unifies a task-conditioned policy and a task-agnostic world model inside a single
+      Transformer backbone, then adapts the world model online at deployment with Test-Time Training.
+    </p>
+
+    <figure class="method-figure">
+      <img src="figures/architecture.jpg" alt="WorldAgen architecture: a shared Transformer backbone with a policy head and a world model head." />
+      <figcaption>
+        WorldAgen architecture. A shared backbone feeds two heads: the <strong>policy head</strong>
+        predicts the next action chunk from the instruction, observations, and robot states, while the
+        <strong>world model head</strong> predicts the next observation chunk to refine the shared
+        representation of environment dynamics.
+      </figcaption>
+    </figure>
+
+    <div class="method-cards">
+      <div class="method-card">
+        <h3>Joint State-Action Modeling</h3>
+        <p>
+          The policy head predicts actions <em>conditioned on the task</em>; the world model head
+          predicts future observations <em>independent of the task</em>. Training them jointly aligns
+          scene understanding with action prediction and produces richer representations of dynamics.
+        </p>
+      </div>
+      <div class="method-card">
+        <h3>Mixed Unidirectional Attention Mask</h3>
+        <p>
+          A <strong>local mask</strong> blocks intra-step leakage between the heads, and a
+          <strong>global mask</strong> keeps the world model invisible to the task instruction.
+          This lets both heads share one backbone while staying strictly causal and decoupled.
+        </p>
+      </div>
+      <div class="method-card">
+        <h3>Two-Stage Test-Time Training</h3>
+        <p>
+          <strong>Stage 1:</strong> free exploratory rollouts collect unlabeled state transitions.
+          <strong>Stage 2:</strong> a few LoRA updates adapt only the world model on the observation
+          loss — improving environment modeling without touching the policy or needing task labels.
+        </p>
+      </div>
+    </div>
+
+    <div class="method-figure-grid">
+      <figure class="method-figure">
+        <img src="figures/attn_mask.png" alt="Mixed Unidirectional Attention Mask combining local and global masking." />
+        <figcaption>
+          The Mixed Unidirectional Attention Mask: local masking prevents the action chunk from seeing
+          its placeholder, and global masking builds a task-agnostic world model head.
+        </figcaption>
+      </figure>
+      <figure class="method-figure">
+        <img src="figures/figure2.png" alt="Trajectory splitting, chunking, and two-step inference." />
+        <figcaption>
+          Trajectory splitting and two-step inference: the policy head fills the action placeholder,
+          then the world model predicts the next observation chunk to roll out the trajectory.
+        </figcaption>
+      </figure>
+    </div>
+  </div>
+</section>
+
+<style>
+  .method-figure {
+    background: #fff;
+    border: 1px solid rgba(99, 102, 241, 0.2);
+    border-radius: 12px;
+    padding: 1.25rem;
+    box-shadow: 0 4px 12px rgba(99, 102, 241, 0.1);
+    margin: 0 auto 2rem auto;
+    max-width: 920px;
+    text-align: center;
+  }
+  .method-figure img {
+    width: 100%;
+    height: auto;
+    border-radius: 6px;
+  }
+  .method-figure figcaption {
+    margin-top: 0.9rem;
+    font-size: 0.92rem;
+    color: var(--text-secondary);
+    line-height: 1.6;
+    text-align: left;
+  }
+  .method-cards {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.25rem;
+    margin: 0 auto 2.5rem auto;
+  }
+  .method-card {
+    background: #fff;
+    border: 1px solid rgba(99, 102, 241, 0.2);
+    border-radius: 12px;
+    padding: 1.4rem 1.3rem;
+    box-shadow: 0 2px 8px rgba(99, 102, 241, 0.1);
+  }
+  .method-card h3 {
+    font-size: 1.1rem;
+    color: var(--accent-color);
+    margin-bottom: 0.6rem;
+  }
+  .method-card p {
+    font-size: 0.95rem;
+    color: var(--text-secondary);
+    line-height: 1.65;
+  }
+  .method-card em { color: #5b21b6; font-style: italic; }
+  .method-figure-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+  }
+  .method-figure-grid .method-figure { margin-bottom: 0; }
+  @media (max-width: 768px) {
+    .method-cards { grid-template-columns: 1fr; }
+    .method-figure-grid { grid-template-columns: 1fr; }
+  }
+</style>

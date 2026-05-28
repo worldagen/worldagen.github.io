@@ -1,0 +1,127 @@
+---
+// Hero.astro — WorldAgen landing
+---
+<section id="hero" class="content-section hero-section">
+  <div class="title-wrapper">
+    <div class="title-with-logo">
+      <img src="logo/worldagen.png" alt="WorldAgen logo" class="title-logo" />
+      <h1 class="main-title" id="animated-title">WorldAgen</h1>
+    </div>
+    <p class="title-tagline">Unified State-Action Prediction with Test-Time World Model Training</p>
+  </div>
+
+  <p class="venue-badge">🚀 AAAI 2026</p>
+
+  <div class="resources-section">
+    <div class="resources-buttons">
+      <a href="https://ojs.aaai.org/index.php/AAAI/article/view/38925" class="resource-button" target="_blank" rel="noopener">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="resource-icon" aria-hidden="true">
+          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6z" fill="none" stroke="currentColor" stroke-width="2"></path>
+          <polyline points="14 2 14 8 20 8" fill="none" stroke="currentColor" stroke-width="2"></polyline>
+        </svg>
+        <span>Paper</span>
+      </a>
+      <a href="https://github.com/mll-lab-nu/WorldAgen" class="resource-button" target="_blank" rel="noopener">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="resource-icon" aria-hidden="true">
+          <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22" fill="none" stroke="currentColor" stroke-width="2"></path>
+        </svg>
+        <span>Code</span>
+      </a>
+      <a href="https://huggingface.co/MLL-Lab/worldagen" class="resource-button" target="_blank" rel="noopener">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="resource-icon" aria-hidden="true">
+          <circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="2"></circle>
+          <path d="M8 12s1.5 2 4 2 4-2 4-2" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"></path>
+          <circle cx="9" cy="10" r="0.8" fill="currentColor"></circle>
+          <circle cx="15" cy="10" r="0.8" fill="currentColor"></circle>
+        </svg>
+        <span>Models</span>
+      </a>
+    </div>
+  </div>
+
+  <div class="authors-section">
+    <div class="authors-list">
+      <p class="authors-line">
+        Chi Wan<sup class="affiliation-marker">*</sup>,
+        Kangrui Wang<sup class="affiliation-marker">*,&dagger;</sup>,
+        Yuan Si,
+        Pingyue Zhang,
+        Manling Li
+      </p>
+      <p class="affiliations">Northwestern University</p>
+      <p class="equal-contribution"><sup>*</sup>Core Contributors&nbsp;&nbsp;&nbsp;<sup>&dagger;</sup>Project Lead</p>
+    </div>
+  </div>
+
+  <div class="hero-teaser">
+    <img src="figures/teaser.png" alt="Overview of WorldAgen: joint state-action prediction, two-stage test-time training pipeline, and performance gains on CALVIN and LIBERO." />
+  </div>
+
+  <div class="hero-abstract">
+    <p>
+      How can <strong>vision-language-action (VLA)</strong> models adapt to new environments where
+      world dynamics shift? Existing methods that combine world modeling with action prediction rely
+      on pretraining on static datasets and lack mechanisms for active adaptation at deployment time,
+      so they struggle to generalize to unseen object configurations and dynamics.
+    </p>
+    <p>
+      We present <strong>WorldAgen</strong>, a unified framework that jointly learns world modeling
+      and action prediction while enabling <strong>Test-Time Training (TTT)</strong>. A shared
+      Transformer backbone hosts two heads: a <em>world model head</em> that predicts future states
+      from past state-action trajectories, and a <em>policy head</em> that predicts actions conditioned
+      on task instructions. A <strong>Mixed Unidirectional Attention Mask</strong> disentangles the two
+      heads within a single architecture.
+    </p>
+    <p>
+      At test time, WorldAgen samples exploratory actions, collects ground-truth state transitions, and
+      performs lightweight TTT updates to refine its world model. This online adaptation sharpens the
+      model's understanding of the environment and, in turn, yields more accurate action predictions —
+      delivering consistent gains on <strong>CALVIN</strong> and <strong>LIBERO</strong>.
+    </p>
+  </div>
+</section>
+
+<style>
+  /* Stack logo+name on a centered row, tagline on its own centered line below */
+  .title-wrapper {
+    flex-direction: column;
+    gap: 0.6rem;
+  }
+  .title-with-logo {
+    gap: 1.1rem;
+  }
+  .title-logo {
+    height: 128px;
+  }
+  .main-title {
+    font-size: clamp(2.4rem, 6vw, 3.6rem);
+  }
+  .title-tagline {
+    font-size: clamp(0.95rem, 1.7vw, 1.35rem);
+    font-weight: 500;
+    color: var(--text-secondary);
+    margin: 0 auto;
+    max-width: 760px;
+    line-height: 1.4;
+    text-align: center;
+  }
+  @media (max-width: 768px) {
+    .title-with-logo { flex-direction: row; }
+    .title-logo { height: 88px; }
+  }
+  .venue-badge {
+    text-align: center;
+    color: #dc2626;
+    font-weight: 700;
+    font-size: 1.2rem;
+    letter-spacing: 0.02em;
+    margin: 0.5rem 0 0;
+  }
+  .equal-contribution {
+    font-size: 0.95rem;
+    color: var(--text-secondary);
+    margin-top: 0.75rem;
+    text-align: center;
+  }
+  .equal-contribution sup { color: var(--accent-color); }
+</style>
