@@ -1,31 +1,76 @@
 ---
 // Demos.astro — before/after Test-Time Training
+const demoSequences = [
+  {
+    task: 'rotate blue block right -> move slider right -> lift red block from slider -> place in slider -> turn off lightbulb',
+    before: 'figures/ttt_comparison/seq1_before_ttt.gif',
+    after: 'figures/ttt_comparison/seq1_after_ttt.gif',
+  },
+  {
+    task: 'open drawer -> push red block right -> move slider left -> lift pink block from slider -> place in slider',
+    before: 'figures/ttt_comparison/seq2_before_ttt.gif',
+    after: 'figures/ttt_comparison/seq2_after_ttt.gif',
+  },
+  {
+    task: 'rotate pink block right -> turn off LED -> lift pink block -> place in slider -> open drawer',
+    before: 'figures/ttt_comparison/seq3_before_ttt.gif',
+    after: 'figures/ttt_comparison/seq3_after_ttt.gif',
+  },
+];
 ---
 <section id="demos" class="content-section">
   <div class="section-container">
     <h2 class="section-title">Test-Time Training in Action</h2>
     <p class="section-description">
-      The same CALVIN task sequence before and after Test-Time Training. Green marks successfully
-      completed sub-tasks, red marks failures. After a few TTT updates to the world model, the agent
-      models the environment well enough to finish the full sequence.
+      Qualitative CALVIN rollouts before and after Test-Time Training. Each pair uses the same
+      task sequence, showing how world model adaptation changes the agent's behavior.
     </p>
 
-    <div class="demos-grid">
-      <figure class="demo-card">
-        <div class="demo-tag before">Before TTT</div>
-        <img src="figures/before_ttt.gif" alt="Rollout before Test-Time Training: the agent stalls after the first sub-task." loading="lazy" />
-        <figcaption>The policy halts after the first sub-task and fails the rest of the sequence.</figcaption>
-      </figure>
-      <figure class="demo-card">
-        <div class="demo-tag after">After TTT</div>
-        <img src="figures/after_ttt.gif" alt="Rollout after Test-Time Training: the agent completes the full task sequence." loading="lazy" />
-        <figcaption>With an adapted world model, the agent completes the full sequence of sub-tasks.</figcaption>
-      </figure>
+    <div class="demo-sequences">
+      {demoSequences.map((demo) => (
+        <div class="demo-sequence">
+          <p class="task-line">
+            <span>Task:</span> {demo.task}
+          </p>
+          <div class="demos-grid">
+            <figure class="demo-card">
+              <div class="demo-tag before">Before TTT</div>
+              <img src={demo.before} alt={`Rollout before Test-Time Training for task: ${demo.task}`} loading="lazy" />
+            </figure>
+            <figure class="demo-card">
+              <div class="demo-tag after">After TTT</div>
+              <img src={demo.after} alt={`Rollout after Test-Time Training for task: ${demo.task}`} loading="lazy" />
+            </figure>
+          </div>
+        </div>
+      ))}
     </div>
   </div>
 </section>
 
 <style>
+  .demo-sequences {
+    display: grid;
+    gap: 2.25rem;
+  }
+  .demo-sequence {
+    display: grid;
+    gap: 1rem;
+    justify-items: center;
+  }
+  .task-line {
+    max-width: 980px;
+    margin: 0 auto;
+    text-align: center;
+    color: var(--text-primary);
+    font-size: 1.02rem;
+    font-weight: 700;
+    line-height: 1.6;
+  }
+  .task-line span {
+    color: var(--accent-color);
+    margin-right: 0.35rem;
+  }
   .demos-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -56,12 +101,6 @@
   }
   .demo-tag.before { background: #fee2e2; color: #b91c1c; }
   .demo-tag.after { background: #dcfce7; color: #15803d; }
-  .demo-card figcaption {
-    margin-top: 0.8rem;
-    font-size: 0.92rem;
-    color: var(--text-secondary);
-    line-height: 1.55;
-  }
   @media (max-width: 768px) {
     .demos-grid { grid-template-columns: 1fr; }
   }
